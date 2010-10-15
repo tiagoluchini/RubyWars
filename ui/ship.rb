@@ -7,14 +7,28 @@ module UI
 
     attr_reader :x, :y
     
-    def initialize(window)
+    def initialize(window, fleet_id)
       @window = window
-      @ship_anim = window.res.retrieve(:ship_anim)
-      @hull_anim = window.res.retrieve(:hull_anim)
-      @x = @y = @vel_x = @vel_y = @angle = 0.0
-      @vel_angle = 0.0
+      @x = @y = @vel_x = @vel_y = @vel_angle = @angle = 0.0
       @anim_id = IDLE_SHIP
       @has_thrusted = @selected = false
+
+      @color = Gosu::Color.new(0xff000000)
+      @color.red = rand(255 - 40) + 40
+      @color.green = rand(255 - 40) + 40
+      @color.blue = rand(255 - 40) + 40
+
+      fleet_id += 1
+
+      @color.red = (fleet_id & 1 == 1) ? 255 : 0
+      @color.green = (fleet_id & 2 == 2) ? 255 : 0
+      @color.blue = (fleet_id & 4 == 4) ? 255 : 0
+
+      @ship_anim = window.res.retrieve(:ship_anim)
+      @hull_anim = window.res.retrieve(:hull_anim)
+      @fleet_marker = window.res.retrieve(:fleet_marker)
+
+
     end
 
     def warp(x, y)
@@ -66,10 +80,9 @@ module UI
 
     def draw
       #DEBUG: clickable area - @window.draw_quad(@x-16, @y-16, Gosu::Color::YELLOW, @x + 16, @y-16, Gosu::Color::YELLOW, @x-16, @y+16, Gosu::Color::YELLOW, @x+16, @y+16, Gosu::Color::YELLOW )
-      @ship_anim[@anim_id].draw_rot(@x, @y, ZOrder::Ships, @angle, 0.5, 0.38)
-      #TODO: correct hull anim
-      #@hull_anim[Gosu::milliseconds / 100 % @hull_anim.size].draw_rot(@x, @y, ZOrder::Ships, 0) if @selected
-      @hull_anim[0].draw_rot(@x, @y, ZOrder::Ships, 0) if @selected
+      @window.draw_quad(@x-16, @y+26, Gosu::Color::YELLOW, @x+16, @y+26, Gosu::Color::YELLOW, @x-16, @y+26+3, Gosu::Color::YELLOW, @x+16, @y+26+3, Gosu::Color::YELLOW, ZOrder::ShipMarkers )
+      @fleet_marker.draw(@x+8, @y-16, ZOrder::ShipMarkers, 1, 1, @color, :additive)
+      @ship_anim[@anim_id].draw_rot(@x, @y, ZOrder::Ships, @angle, 0.5, 0.38, 1, 1)
     end
     
     private 

@@ -17,5 +17,5 @@ fleet_builders_yml.each do |fb_txt|
   s.deploy_fleet(fb)
 end
 
-window = RubyWars::UI::GameWindow.new
+window = RubyWars::UI::GameWindow.new(s)
 window.show

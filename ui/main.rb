@@ -8,22 +8,30 @@ module RubyWars
 module UI
 
   module ZOrder
-    Background, Ships, UI = *0..3
+    Background, Ships, ShipMarkers, UI = *0..3
   end
 
   class GameWindow < Gosu::Window    
 
-    def initialize
+    def initialize(system)
       super(1280, 960, false)
-      self.caption = 'RubyWars'
+      @system = system
+      self.caption = "RubyWars - #{system.name}"
       load_resources
-
-
-      #TODO hooks with engine
       
-      #TODO should be ship (multiple ones)
-      @player = Ship.new(self)
-      @player.warp(320, 240)
+      @ships = []
+      system.fleets.each_with_index do |fleet, i|
+        fleet.each do |ship|
+          ship_ui = Ship.new(self, i)
+          ship_ui.warp(ship.location[0] * 32, ship.location[1] * 32)
+          @ships.push(ship_ui)
+        end
+      end
+      
+#      
+#      #TODO should be ship (multiple ones)
+#      @player = Ship.new(self)
+#      @player.warp(320, 240)
     end
 
     def res
@@ -48,13 +56,16 @@ module UI
           @player.unselect
         end
       end
-      @player.move
+      
+      @ships.each { |s| s.move }
+      #@player.move
     end
 
     def draw
       #TODO scaling depending of "virtual" size
       background_draw
-      @player.draw
+      @ships.each { |s| s.draw }
+#      @player.draw
     end
     
     def button_down(id)
@@ -71,9 +82,11 @@ module UI
 
       def load_resources
         @res = ResourceManager.new(self)
-        @res.load(:background, 'ui/media/space.png', true)
-        @res.load_tiles(:ship_anim, 'ui/media/ship.png', 32, 42)
-        @res.load_tiles(:hull_anim, 'ui/media/hull.png', 40, 40)
+        @res.
+          load(:background, 'ui/media/space.png', true).
+            load_tiles(:ship_anim, 'ui/media/ship.png', 32, 42).
+            load_tiles(:hull_anim, 'ui/media/hull.png', 40, 40).
+            load(:fleet_marker, 'ui/media/fleet_marker.png')
       end
       
       def background_draw

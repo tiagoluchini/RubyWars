@@ -10,10 +10,12 @@ module UI
     
     def load(id, resource, border = false)
       @cache[id] = Gosu::Image.new(@window, resource, border)
+      self
     end
     
     def load_tiles(id, resource, x, y, border = false)
       @cache[id] = Gosu::Image::load_tiles(@window, resource, x, y, border)
+      self
     end
 
     def retrieve(id)

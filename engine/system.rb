@@ -2,6 +2,8 @@ module RubyWars
 module Engine
 
   class System
+  
+    attr_reader :fleets
     
     SMALL, MEDIUM, BIG = [40, 30], [80, 60], [160, 120]
     

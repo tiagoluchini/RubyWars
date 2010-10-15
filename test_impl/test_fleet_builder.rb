@@ -6,8 +6,9 @@ module TestImpl
   class TestFleetBuilder < FleetBuilder
 
     def create_fleet(system)
-      [{:ship => TestShip.new(system), :location => [0,0], :heading => 90},
-       {:ship => TestShip.new(system), :location => [10,0], :heading => 90}]
+      [{:ship => TestShip.new(system), :location => [0,0], :heading => 0.0},
+       {:ship => TestShip.new(system), :location => [2,0], :heading => 0.0},
+       {:ship => TestShip.new(system), :location => [4,0], :heading => 0.0},]
     end
 
   end
