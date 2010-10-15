@@ -18,6 +18,9 @@ module UI
       @system = system
       self.caption = "RubyWars - #{system.name}"
       load_resources
+
+      factor_options = [1.0, 0.5, 0.25]     
+      @scale_factor = factor_options[system.size]
       
       @ships = []
       system.fleets.each_with_index do |fleet, i|
@@ -27,11 +30,6 @@ module UI
           @ships.push(ship_ui)
         end
       end
-      
-#      
-#      #TODO should be ship (multiple ones)
-#      @player = Ship.new(self)
-#      @player.warp(320, 240)
     end
 
     def res
@@ -39,6 +37,8 @@ module UI
     end
 
     def update
+      @system.tick
+    
       if button_down? Gosu::Button::KbLeft or button_down? Gosu::Button::GpLeft then
         @player.thrust_left
       end
@@ -58,18 +58,17 @@ module UI
       end
       
       @ships.each { |s| s.move }
-      #@player.move
     end
 
     def draw
-      #TODO scaling depending of "virtual" size
       background_draw
-      @ships.each { |s| s.draw }
-#      @player.draw
+      @font.draw(@system.name, 10, 10, ZOrder::UI, 1.0, 1.0, 0xffffff00)
+      scale(@scale_factor) do
+        @ships.each { |s| s.draw }
+      end
     end
     
     def button_down(id)
-
       if id == Gosu::MsLeft then
         puts "Clicked: [#{mouse_x}x#{mouse_y}] - Player: [#{@player.x}x#{@player.y}]" 
       end
@@ -81,6 +80,7 @@ module UI
     private 
 
       def load_resources
+        @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
         @res = ResourceManager.new(self)
         @res.
           load(:background, 'ui/media/space.png', true).

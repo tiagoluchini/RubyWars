@@ -5,7 +5,8 @@ module Engine
   
     attr_reader :fleets
     
-    SMALL, MEDIUM, BIG = [40, 30], [80, 60], [160, 120]
+    SMALL, MEDIUM, BIG = *0..2
+    DIMENSIONS = [[40, 30], [80, 60], [160, 120]]
     
     def initialize(name = 'Unnamed System', size = SMALL)
       @fleets = []
@@ -19,6 +20,10 @@ module Engine
       @size
     end
     
+    def dimensions_in_bu
+      DIMENSIONS[@size]
+    end
+    
     def name
       @name
     end
@@ -28,8 +33,8 @@ module Engine
     def deploy_fleet(fleet_builder)
       fleet = fleet_builder.create_fleet(self)
       #TODO check whether the locations are valid against the universe
-      x_base = rand(size[0] - 1)
-      y_base = rand(size[1] - 1)
+      x_base = rand(dimensions_in_bu[0] - 1)
+      y_base = rand(dimensions_in_bu[1] - 1)
       
       ships_array = []
       fleet.each do |ship| 
