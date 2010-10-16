@@ -9,14 +9,17 @@ module Engine
 
     LOW_HULL_LEVEL = 0.4
     CRITICAL_HULL_LEVEL = 0.1
+    BORDER_WARNING_DISTANCE = 2
 
-    attr_accessor :x, :y, :heading
+    attr_accessor :x, :y, :heading, :vel_x, :vel_y, :vel_turning
+    attr_accessor :has_thrusted_forward, :has_thrusted_right, :has_thrusted_left
     
     def initialize(system)
       @system = system
       @modules, @commands = [], []
       @hull = 1.0
       @lock = nil
+      @has_thrusted_forward = @has_thrusted_right = @has_thrusted_left = false
     end
     
     # ---- informational
@@ -81,7 +84,7 @@ module Engine
     # ---- external events
     
     def damage(damage_points)
-      @hull -= damage_points
+      @hull -= damage_points.abs
       sensor_input(:hull_damage)
     end
         
@@ -89,6 +92,11 @@ module Engine
       sensor_input(:low_hull_level) if @hull < LOW_HULL_LEVEL && @hull > CRITICAL_HULL_LEVEL
       sensor_input(:critical_hull_level) if @hull < CRITICAL_HULL_LEVEL
       sensor_input(:lock_location, @lock.location) if @lock
+      if @x <= BORDER_WARNING_DISTANCE or @y <= BORDER_WARNING_DISTANCE or
+            @x >= @system.dimensions_in_bu[0] - BORDER_WARNING_DISTANCE or
+            @y >= @system.dimensions_in_bu[1] - BORDER_WARNING_DISTANCE
+        sensor_input(:system_boundaries_approaching)
+      end
     end
 
     def enemy_detected(location)

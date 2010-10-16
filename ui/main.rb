@@ -3,6 +3,7 @@ require 'gosu'
 
 require 'ui/resource_manager.rb'
 require 'ui/ship.rb'
+require 'ui/ship_hook.rb'
 require 'ui/system_status.rb'
 
 module RubyWars
@@ -28,7 +29,8 @@ module UI
       @ships = []
       system.fleets.each_with_index do |fleet, i|
         fleet.each do |ship|
-          ship_ui = Ship.new(self, i)
+          ship_ui = Ship.new(self, i, ship)
+          #TODO warp here?
           ship_ui.warp(ship.location[0] * 32, ship.location[1] * 32)
           @ships.push(ship_ui)
         end
@@ -41,7 +43,7 @@ module UI
 
     def update
       @system.tick
-      @ships.each { |s| s.move }
+      @ships.each { |s| s.update }
     
 #      if button_down? Gosu::Button::KbLeft or button_down? Gosu::Button::GpLeft then
 #        @player.thrust_left

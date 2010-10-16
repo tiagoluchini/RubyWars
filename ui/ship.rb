@@ -7,8 +7,9 @@ module UI
 
     attr_accessor :life, :x, :y, :angle
     
-    def initialize(window, fleet_id)
+    def initialize(window, fleet_id, ship)
       @window = window
+      @hook = ShipHook.new(self, ship)
       @x = @y = @vel_x = @vel_y = @vel_angle = @angle = 0.0
       @life = 1.0
       @anim_id = IDLE_SHIP
@@ -38,39 +39,25 @@ module UI
     end
     
     def thrust_left
-      @vel_angle -= 1.5
+      #@vel_angle -= 1.5
       thrust(LEFT_THRUST)
     end
     
     def thrust_right
-      @vel_angle += 1.5
+      #@vel_angle += 1.5
       thrust(RIGHT_THRUST)
     end
     
     def thrust_forward
-      @vel_x += Gosu::offset_x(@angle, 0.5)
-      @vel_y += Gosu::offset_y(@angle, 0.5)
+      #@vel_x += Gosu::offset_x(@angle, 0.5)
+      #@vel_y += Gosu::offset_y(@angle, 0.5)
       thrust(FORWARD_THRUST)
     end
     
-    def move
-#      @x += @vel_x
-#      @y += @vel_y
-#      @angle += @vel_angle
-
-#      #TODO: should wrap?
-#      @x %= 1280
-#      @y %= 960
-#      
-#      #TODO: energy losses? should have? should come from universe at least
-#      @vel_x *= 0.95
-#      @vel_y *= 0.95
-#      @vel_angle *= 0.90
-
-      
+    def update
+      @hook.update
       @anim_id = IDLE_SHIP unless @has_thrusted
       @has_thrusted = false
-      
     end
 
     def draw

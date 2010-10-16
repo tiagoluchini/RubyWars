@@ -63,11 +63,7 @@ module Engine
     
     
     # ---- ship informational
-    
-    def velocity(ship)
-      #TODO
-    end
-    
+        
     def fleet_members(ship)
       fleet_num = nil
       @fleets.each_with_index do |fleet, i|
@@ -82,20 +78,62 @@ module Engine
         @fleets[fleet_num]
       end
     end
+    
      
     # --- tick
     
     def tick
       @fleets.each do |fleet|
         fleet.each do |ship|
+          apply_damages(ship)
           ship.tick_sensors
           ship.tick
           ship.exec_commands
           ship.modules.each { |mod| mod.tick }
+          apply_energy_losses(ship)
         end
       end
     end
+   
+    private
     
+      def apply_damages(ship)
+        if ship.x <= 0.0 or ship.x >= dimensions_in_bu[0]
+          ship.damage(ship.vel_x.abs * 5)
+          ship.vel_x = 0.0
+          ship.x = 0.01 if ship.x <= 0.0
+          ship.x = dimensions_in_bu[0] - 0.99 if ship.x >= dimensions_in_bu[0]
+        end
+        if ship.y <= 0.0 or ship.y >= dimensions_in_bu[1]
+          ship.damage(ship.vel_y.abs * 5)
+          ship.vel_y = 0.0
+          ship.y = 0.01 if ship.y <= 0.0
+          ship.y = dimensions_in_bu[1] - 0.99 if ship.y >= dimensions_in_bu[1]
+        end
+      end
+    
+      def apply_energy_losses(ship)
+        unless in_border?(ship)
+          ship.vel_x *= Universe::LINEAR_ENERGY_LOSS
+          ship.vel_y *= Universe::LINEAR_ENERGY_LOSS
+          ship.vel_turning *= Universe::CENTRIPETAL_ENERGY_LOSS
+        else
+          ship.vel_x *= Universe::LINEAR_ENERGY_LOSS_AT_BORDER
+          ship.vel_y *= Universe::LINEAR_ENERGY_LOSS_AT_BORDER
+          ship.vel_turning *= Universe::CENTRIPETAL_ENERGY_LOSS_AT_BORDER
+        end
+      end 
+      
+      def in_border?(ship)
+        if ship.x <= Universe::BORDER_SIZE_IN_BU or ship.y <= Universe::BORDER_SIZE_IN_BU or
+            ship.x >= dimensions_in_bu[0] - Universe::BORDER_SIZE_IN_BU or
+            ship.y >= dimensions_in_bu[1] - Universe::BORDER_SIZE_IN_BU
+          true
+        else
+          false
+        end
+      end
+   
   end
 
 end
