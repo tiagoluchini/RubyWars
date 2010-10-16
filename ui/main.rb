@@ -3,6 +3,7 @@ require 'gosu'
 
 require 'ui/resource_manager.rb'
 require 'ui/ship.rb'
+require 'ui/system_status.rb'
 
 module RubyWars
 module UI
@@ -21,6 +22,8 @@ module UI
 
       factor_options = [1.0, 0.5, 0.25]     
       @scale_factor = factor_options[system.size]
+      
+      @system_status = SystemStatus.new(self, system)
       
       @ships = []
       system.fleets.each_with_index do |fleet, i|
@@ -66,6 +69,7 @@ module UI
       scale(@scale_factor) do
         @ships.each { |s| s.draw }
       end
+      @system_status.draw
     end
     
     def button_down(id)
