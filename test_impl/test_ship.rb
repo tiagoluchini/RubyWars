@@ -4,6 +4,12 @@ module TestImpl
   include Engine
 
   class TestShip < Ship
+  
+    def initialize(system)
+      super(system)
+      plug_module(Thruster.new(self))
+      @move_count = 0
+    end
 
     def msg_received(from, msg, msg_content = nil)
       case msg
@@ -30,6 +36,13 @@ module TestImpl
         puts "#{self} don't know my friends locations"
         broadcast_msg(:please_update_locations)
       end
+      
+      if @move_count < 30
+        activate_module(0, 'thrust_forward')
+        #modules[0].thrust_forward
+        @move_count += 1
+      end
+      
     end
 
   end

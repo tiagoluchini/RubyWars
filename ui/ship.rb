@@ -5,8 +5,7 @@ module UI
   
     IDLE_SHIP, FORWARD_THRUST, RIGHT_THRUST, LEFT_THRUST = *0..3
 
-    attr_reader :x, :y
-    attr_accessor :life
+    attr_accessor :life, :x, :y, :angle
     
     def initialize(window, fleet_id)
       @window = window
@@ -55,18 +54,19 @@ module UI
     end
     
     def move
-      @x += @vel_x
-      @y += @vel_y
-      @angle += @vel_angle
+#      @x += @vel_x
+#      @y += @vel_y
+#      @angle += @vel_angle
 
-      #TODO: should wrap?
-      @x %= 1280
-      @y %= 960
-      
-      #TODO: energy losses? should have? should come from universe at least
-      @vel_x *= 0.95
-      @vel_y *= 0.95
-      @vel_angle *= 0.90
+#      #TODO: should wrap?
+#      @x %= 1280
+#      @y %= 960
+#      
+#      #TODO: energy losses? should have? should come from universe at least
+#      @vel_x *= 0.95
+#      @vel_y *= 0.95
+#      @vel_angle *= 0.90
+
       
       @anim_id = IDLE_SHIP unless @has_thrusted
       @has_thrusted = false

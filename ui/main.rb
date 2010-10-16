@@ -41,26 +41,26 @@ module UI
 
     def update
       @system.tick
-    
-      if button_down? Gosu::Button::KbLeft or button_down? Gosu::Button::GpLeft then
-        @player.thrust_left
-      end
-      if button_down? Gosu::Button::KbRight or button_down? Gosu::Button::GpRight then
-        @player.thrust_right
-      end
-      if button_down? Gosu::Button::KbUp or button_down? Gosu::Button::GpButton0 then
-        @player.thrust_forward
-      end
-      if button_down? Gosu::MsLeft then
-        if mouse_x >= @player.x - 16 and mouse_x <= @player.x + 16 and
-           mouse_y >= @player.y - 16 and mouse_y <= @player.y + 16 then
-          @player.select
-        else
-          @player.unselect
-        end
-      end
-      
       @ships.each { |s| s.move }
+    
+#      if button_down? Gosu::Button::KbLeft or button_down? Gosu::Button::GpLeft then
+#        @player.thrust_left
+#      end
+#      if button_down? Gosu::Button::KbRight or button_down? Gosu::Button::GpRight then
+#        @player.thrust_right
+#      end
+#      if button_down? Gosu::Button::KbUp or button_down? Gosu::Button::GpButton0 then
+#        @player.thrust_forward
+#      end
+#      if button_down? Gosu::MsLeft then
+#        if mouse_x >= @player.x - 16 and mouse_x <= @player.x + 16 and
+#           mouse_y >= @player.y - 16 and mouse_y <= @player.y + 16 then
+#          @player.select
+#        else
+#          @player.unselect
+#        end
+#      end
+      
     end
 
     def draw

@@ -20,7 +20,7 @@ module UI
     def draw
       @system.fleets.each_with_index do |fleet, i|
         @window.res.retrieve(:fleet_marker).draw(10, 32 + (i*20), ZOrder::UI, 1, 1, @colors[i], :additive)
-        @font.draw("Ships: #{fleet.size} (#{fleet.inject(0.0) {|sum,s| sum + s.hull}})", 22, 30 + (i*20), ZOrder::UI, 1.0, 1.0, Gosu::Color::GREEN)
+        @font.draw("Ships: #{fleet.size} (#{fleet.inject(0.0) {|sum,s| sum + s.hull}})", 22, 30 + (i*20), ZOrder::UI, 1.0, 1.0, @colors[i])
       end
     end
 
