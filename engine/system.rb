@@ -102,13 +102,13 @@ module Engine
           ship.damage(ship.vel_x.abs * 5)
           ship.vel_x = 0.0
           ship.x = 0.01 if ship.x <= 0.0
-          ship.x = dimensions_in_bu[0] - 0.99 if ship.x >= dimensions_in_bu[0]
+          ship.x = dimensions_in_bu[0] - 0.01 if ship.x >= dimensions_in_bu[0]
         end
         if ship.y <= 0.0 or ship.y >= dimensions_in_bu[1]
           ship.damage(ship.vel_y.abs * 5)
           ship.vel_y = 0.0
           ship.y = 0.01 if ship.y <= 0.0
-          ship.y = dimensions_in_bu[1] - 0.99 if ship.y >= dimensions_in_bu[1]
+          ship.y = dimensions_in_bu[1] - 0.01 if ship.y >= dimensions_in_bu[1]
         end
       end
     
