@@ -37,9 +37,16 @@ module TestImpl
         broadcast_msg(:please_update_locations)
       end
       
-      if @move_count < 30
-        activate_module(0, 'thrust_forward')
-        #modules[0].thrust_forward
+      if @move_count < 60 * 10
+        r = rand(3)
+        case r
+          when 0
+            activate_module(0, 'thrust_forward')
+          when 1
+            activate_module(0, 'thrust_right')
+          when 2
+            activate_module(0, 'thrust_left')
+        end
         @move_count += 1
       end
       

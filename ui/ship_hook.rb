@@ -10,12 +10,13 @@ module UI
     def update
       @ship_ui.x = @ship.x * 32
       @ship_ui.y = @ship.y * 32
+      @ship_ui.angle = @ship.heading
       @ship_ui.life = @ship.hull
 
       @ship_ui.thrust_forward if @ship.has_thrusted_forward
-#        @ship_ui.thrust_right if comm[0] == 'thrust_right'
-#        @ship_ui.thrust_left if comm[0] == 'thrust_left'
-      @ship.has_thrusted_forward = false
+      @ship_ui.thrust_right if @ship.has_thrusted_right
+      @ship_ui.thrust_left if @ship.has_thrusted_left
+      @ship.has_thrusted_forward = @ship.has_thrusted_right = @ship.has_thrusted_left = false
 
     end
 

@@ -16,11 +16,13 @@ module Modules
     end
     
     def thrust_right
-      #TODO turn right
+      @ship.vel_turning -= 1.5
+      @ship.has_thrusted_right = true
     end
     
     def thrust_left
-      #TODO turn left
+      @ship.vel_turning += 1.5
+      @ship.has_thrusted_left = true
     end
     
     def tick
