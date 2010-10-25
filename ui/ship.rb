@@ -6,7 +6,7 @@ module UI
     IDLE_SHIP, FORWARD_THRUST, RIGHT_THRUST, LEFT_THRUST = *0..3
     EXPLOSION = [4, 5, 6]
 
-    attr_accessor :life, :x, :y, :angle
+    attr_accessor :life, :x, :y, :angle, :remove_visual
     
     def initialize(window, fleet_id, ship)
       @window = window
@@ -63,8 +63,9 @@ module UI
       draw_life
       @fleet_marker.draw(@x+8, @y-16, ZOrder::ShipMarkers, 1, 1, @color, :additive)
       if @life <= 0 then
-        @ship_anim[EXPLOSION[@ex_anim_counter]].draw_rot(@x, @y, ZOrder::Ships, @angle, 0.5, 0.38, 1, 1)
-        @ex_anim_counter += 1 if @ex_anim_counter < 2
+        @ship_anim[EXPLOSION[@ex_anim_counter / 10]].draw_rot(@x, @y, ZOrder::Ships, @angle, 0.5, 0.38, 1, 1)
+        @ex_anim_counter += 1 if @ex_anim_counter < 30
+        @remove_visual = true if @ex_anim_counter == 30
       else
         @ship_anim[@anim_id].draw_rot(@x, @y, ZOrder::Ships, @angle, 0.5, 0.38, 1, 1)
       end

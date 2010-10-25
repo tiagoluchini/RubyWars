@@ -86,6 +86,10 @@ module Engine
       @fleets.each do |fleet|
         fleet.each do |ship|
           apply_damages(ship)
+          if ship.hull <= 0.0 then
+            fleet.delete(ship)
+            break
+          end
           ship.tick_sensors
           ship.tick
           ship.exec_commands

@@ -69,7 +69,13 @@ module UI
       background_draw
       @font.draw(@system.name, 10, 10, ZOrder::UI, 1.0, 1.0, 0xffffff00)
       scale(@scale_factor) do
-        @ships.each { |s| s.draw }
+        @ships.each do |s| 
+          if s.remove_visual then
+            @ships.delete(s)
+            break
+          end  
+          s.draw 
+        end
       end
       @system_status.draw
     end

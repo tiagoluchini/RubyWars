@@ -11,7 +11,7 @@ module Engine
     CRITICAL_HULL_LEVEL = 0.1
     BORDER_WARNING_DISTANCE = 2
 
-    attr_accessor :x, :y, :heading, :vel_x, :vel_y, :vel_turning
+    attr_accessor :x, :y, :heading, :vel_x, :vel_y, :vel_turning, :hull
     attr_accessor :has_thrusted_forward, :has_thrusted_right, :has_thrusted_left
     
     def initialize(system)
@@ -31,11 +31,7 @@ module Engine
     def velocity
       @system.velocity(self)
     end
-    
-    def hull
-      @hull
-    end
-    
+        
     def modules
       @modules
     end
