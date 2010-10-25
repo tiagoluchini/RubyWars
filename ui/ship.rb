@@ -4,6 +4,7 @@ module UI
   class Ship
   
     IDLE_SHIP, FORWARD_THRUST, RIGHT_THRUST, LEFT_THRUST = *0..3
+    EXPLOSION = [4, 5, 6]
 
     attr_accessor :life, :x, :y, :angle
     
@@ -14,6 +15,7 @@ module UI
       @life = 1.0
       @anim_id = IDLE_SHIP
       @has_thrusted = @selected = false
+      @ex_anim_counter = 0
 
       fleet_id += 1
       @color = Gosu::Color.new(0xff000000)
@@ -39,18 +41,14 @@ module UI
     end
     
     def thrust_left
-      #@vel_angle -= 1.5
       thrust(LEFT_THRUST)
     end
     
     def thrust_right
-      #@vel_angle += 1.5
       thrust(RIGHT_THRUST)
     end
     
     def thrust_forward
-      #@vel_x += Gosu::offset_x(@angle, 0.5)
-      #@vel_y += Gosu::offset_y(@angle, 0.5)
       thrust(FORWARD_THRUST)
     end
     
@@ -64,7 +62,12 @@ module UI
       #DEBUG: clickable area - @window.draw_quad(@x-16, @y-16, Gosu::Color::YELLOW, @x + 16, @y-16, Gosu::Color::YELLOW, @x-16, @y+16, Gosu::Color::YELLOW, @x+16, @y+16, Gosu::Color::YELLOW )
       draw_life
       @fleet_marker.draw(@x+8, @y-16, ZOrder::ShipMarkers, 1, 1, @color, :additive)
-      @ship_anim[@anim_id].draw_rot(@x, @y, ZOrder::Ships, @angle, 0.5, 0.38, 1, 1)
+      if @life <= 0 then
+        @ship_anim[EXPLOSION[@ex_anim_counter]].draw_rot(@x, @y, ZOrder::Ships, @angle, 0.5, 0.38, 1, 1)
+        @ex_anim_counter += 1 if @ex_anim_counter < 2
+      else
+        @ship_anim[@anim_id].draw_rot(@x, @y, ZOrder::Ships, @angle, 0.5, 0.38, 1, 1)
+      end
     end
     
     private 
